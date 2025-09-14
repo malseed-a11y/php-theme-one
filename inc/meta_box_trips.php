@@ -1,0 +1,90 @@
+<?php
+// إضافة الـ Meta Box في الشريط الجانبي
+function trip_add_meta_box()
+{
+    add_meta_box(
+        'trip_details',
+        'Trip Details',
+        'trip_meta_box_callback',
+        'trip',
+        'side',      // sidebar
+        'low'
+    );
+}
+add_action('add_meta_boxes', 'trip_add_meta_box');
+
+function trip_meta_box_callback($post)
+{
+    wp_nonce_field('save_trip_details', 'trip_nonce');
+
+    $from_city = get_post_meta($post->ID, '_trip_from_city', true);
+    $to_city   = get_post_meta($post->ID, '_trip_to_city', true);
+    $date      = get_post_meta($post->ID, '_trip_date', true);
+    $time      = get_post_meta($post->ID, '_trip_time', true);
+
+    $cities = array('Cairo', 'Dubai', 'Paris', 'Damascus');
+
+    echo '<div class="trip-meta-box">';
+
+    // مدينة الانطلاق
+    echo '<p><label for="trip_from_city"><strong>City of Departure</strong></label><br>
+            <select name="trip_from_city" id="trip_from_city">';
+    echo '<option value="">Choose city</option>';
+    foreach ($cities as $city) {
+        echo '<option value="' . esc_attr($city) . '" ' . selected($from_city, $city, false) . '>' . esc_html($city) . '</option>';
+    }
+    echo '</select></p>';
+
+    // مدينة الوصول
+    echo '<p><label for="trip_to_city"><strong>City of Arrival</strong></label><br>
+            <select name="trip_to_city" id="trip_to_city">';
+    echo '<option value="">Choose city</option>';
+    foreach ($cities as $city) {
+        echo '<option value="' . esc_attr($city) . '" ' . selected($to_city, $city, false) . '>' . esc_html($city) . '</option>';
+    }
+    echo '</select></p>';
+
+    // تاريخ الرحلة
+    echo '<p><label for="trip_date"><strong>Date of the Trip</strong></label><br>
+            <input type="date" name="trip_date" id="trip_date" value="' . esc_attr($date) . '"/>';
+          </p><br>';
+
+    // وقت الرحلة
+    echo '<p><label for="trip_time"><strong>Time of the Trip</strong></label><br>
+            <select name="trip_time" id="trip_time">
+                <option value="">Choose time</option>
+                <option value="morning" ' . selected($time, 'morning', false) . '>Morning</option>
+                <option value="evening" ' . selected($time, 'evening', false) . '>Evening</option>
+            </select>
+          </p>';
+
+    echo '</div>';
+}
+// حفظ البيانات
+function save_trip_meta($post_id)
+{
+    if (!isset($_POST['trip_nonce']) || !wp_verify_nonce($_POST['trip_nonce'], 'save_trip_details')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (isset($_POST['trip_from_city'])) {
+        update_post_meta($post_id, '_trip_from_city', sanitize_text_field($_POST['trip_from_city']));
+    }
+
+    if (isset($_POST['trip_to_city'])) {
+        update_post_meta($post_id, '_trip_to_city', sanitize_text_field($_POST['trip_to_city']));
+    }
+
+    if (isset($_POST['trip_date'])) {
+        update_post_meta($post_id, '_trip_date', sanitize_text_field($_POST['trip_date']));
+    }
+
+    if (isset($_POST['trip_time'])) {
+        update_post_meta($post_id, '_trip_time', sanitize_text_field($_POST['trip_time']));
+    }
+}
+add_action('save_post', 'save_trip_meta');

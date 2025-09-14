@@ -283,3 +283,5 @@ function add_banner_to_content($content)
 
 
 add_action('the_content', 'add_banner_to_content', 10, 1);
+
+require_once(dirname(__FILE__) . '/inc/trips_cpt.php');

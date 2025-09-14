@@ -10,3 +10,56 @@ Author: Mosaab
   width: 600px;
   height: 300px;
 }
+
+.trip-meta-box {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: "Tajawal", Arial, sans-serif;
+}
+
+.trip-meta-box h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #0073aa;
+  border-bottom: 2px solid #0073aa;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.trip-meta-box span {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.trip-meta-box span::before {
+  margin-right: 6px;
+  color: #0073aa;
+  font-weight: bold;
+}
+
+.trip-meta-box span.from::before {
+  content: "🚩";
+}
+
+.trip-meta-box span.to::before {
+  content: "🏁";
+}
+
+.trip-meta-box span.date::before {
+  content: "📅";
+}
+
+.trip-meta-box span.time::before {
+  content: "⏰";
+}
