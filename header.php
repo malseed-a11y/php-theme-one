@@ -47,6 +47,7 @@
                 ?>
 
                 <hr>
+
                 <ul class="social-list list-inline py-3 mx-auto">
                     <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
@@ -55,16 +56,34 @@
                     <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
                 </ul>
 
-            </div>
+
 
 
         </nav>
 
-<?php
-dynamic_sidebar('sidebar-1');
-?>
+        <?php
+        dynamic_sidebar('sidebar-1');
+        ?>
     </header>
     <div class="main-wrapper">
         <header class="page-title theme-bg-light text-center gradient py-5">
-            <h1 class="heading"><?php the_title(); ?></h1>
+            <h1 class="heading"><?php
+                                //if is category page or tag page or author page or archive or search or post page or page
+                                if (is_category()) {
+                                    single_cat_title();
+                                } elseif (is_tag()) {
+                                    single_tag_title();
+                                } elseif (is_author()) {
+                                    the_post();
+                                    echo 'Author: ' . get_the_author();
+                                } elseif (is_page()) {
+                                    the_title();
+                                } elseif (is_archive()) {
+                                    the_archive_title();
+                                    //add single post title
+                                } elseif (is_single()) {
+                                    the_title();
+                                } else {
+                                }
+                                ?></h1>
         </header>
