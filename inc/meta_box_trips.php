@@ -23,34 +23,39 @@ function trip_meta_box_callback($post)
     $time      = get_post_meta($post->ID, '_trip_time', true);
 
     $cities = array('Cairo', 'Dubai', 'Paris', 'Damascus');
-
     echo '<div class="trip-meta-box">';
 
-    // مدينة الانطلاق
-    echo '<p><label for="trip_from_city"><strong>City of Departure</strong></label><br>
-            <select name="trip_from_city" id="trip_from_city">';
-    echo '<option value="">Choose city</option>';
+    // City of Departure
+    echo '<p class="form-field">
+            <label for="trip_from_city"><strong>City of Departure be</strong></label>
+            <select name="trip_from_city" id="trip_from_city">
+                <option value="">Choose city</option>';
     foreach ($cities as $city) {
         echo '<option value="' . esc_attr($city) . '" ' . selected($from_city, $city, false) . '>' . esc_html($city) . '</option>';
     }
-    echo '</select></p>';
+    echo '</select>
+          </p>';
 
-    // مدينة الوصول
-    echo '<p><label for="trip_to_city"><strong>City of Arrival</strong></label><br>
-            <select name="trip_to_city" id="trip_to_city">';
-    echo '<option value="">Choose city</option>';
+    // City of Arrival  
+    echo '<p class="form-field">
+            <label for="trip_to_city"><strong>City of Arrival be</strong></label>
+            <br><select name="trip_to_city" id="trip_to_city">
+                <option value="">Choose city</option>';
     foreach ($cities as $city) {
         echo '<option value="' . esc_attr($city) . '" ' . selected($to_city, $city, false) . '>' . esc_html($city) . '</option>';
     }
-    echo '</select></p>';
+    echo '</select>
+          </p>';
 
-    // تاريخ الرحلة
-    echo '<p><label for="trip_date"><strong>Date of the Trip</strong></label><br>
-            <input type="date" name="trip_date" id="trip_date" value="' . esc_attr($date) . '"/>';
-          </p><br>';
+    // Date of the Trip
+    echo '<p class="form-field">
+            <label for="trip_date"><strong>Date of the Trip be</strong></label> 
+            <input type="date" name="trip_date" id="trip_date" value="' . esc_attr($date) . '"/>
+          </p>';
 
-    // وقت الرحلة
-    echo '<p><label for="trip_time"><strong>Time of the Trip</strong></label><br>
+    // Time of the Trip
+    echo '<p class="form-field">
+            <label for="trip_time"><strong>Time of the Trip be</strong></label>
             <select name="trip_time" id="trip_time">
                 <option value="">Choose time</option>
                 <option value="morning" ' . selected($time, 'morning', false) . '>Morning</option>
@@ -60,6 +65,7 @@ function trip_meta_box_callback($post)
 
     echo '</div>';
 }
+
 // حفظ البيانات
 function save_trip_meta($post_id)
 {
