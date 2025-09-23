@@ -108,6 +108,6 @@ function handle_send_message_form()
         wp_die('Database insertion failed: ' . $wpdb->last_error);
     } else {
 
-        header('Location: http://localhost/wordpress/');
+        header('Location:http://localhost/wordpress/comments-form/');
     }
 }
