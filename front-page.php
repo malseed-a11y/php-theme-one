@@ -55,8 +55,7 @@
             <label for="message">Message</label>
             <textarea id="message" name="message" required><?php echo isset($_GET['message']) ? esc_textarea($_GET['message']) : ''; ?></textarea>
         </div>
-
-        <button type="submit">Submit</button>
+        <button type="submit" name="clear_cache">Submit</button>
     </form>
 
 
@@ -65,7 +64,20 @@
     {
         global $wpdb;
         $table_comments = $wpdb->prefix . 'table_comments';
-        $results = $wpdb->get_results("SELECT * FROM $table_comments");
+
+        $results = get_transient('_wp_prfix_comments_');
+        if (!$results) {
+
+            $results = $wpdb->get_results("SELECT * FROM $table_comments");
+
+            set_transient('_wp_prfix_comments_', $results, 60 * HOUR_IN_SECONDS);
+            $results = get_transient('_wp_prfix_comments_');
+        }
+
+        if (isset($_POST['clear_cache'])) {
+            delete_transient('_wp_prfix_comments_');
+        }
+
 
         if (empty($results)) {
             return '<p class="comments-no-data">No data found</p>';

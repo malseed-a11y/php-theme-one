@@ -174,37 +174,57 @@ function trips_register_rest_routes()
 
 function get_all_trips()
 {
-    $query   = new WP_Query(['post_type' => 'trip', 'posts_per_page' => 20]);
-    $results = [];
+    $cache = get_transient('_wp_prfix_trips_');
+    if (!$cache) {
 
-    while ($query->have_posts()) {
-        $query->the_post();
-        $results[] = [
-            'id'         => get_the_ID(),
-            'title'      => get_the_title(),
-            'content'    => get_the_content(),
-            'categories' => wp_get_post_terms(get_the_ID(), 'trip_category', ['fields' => 'names']),
-            'tags'       => wp_get_post_terms(get_the_ID(), 'trip_tag', ['fields' => 'names']),
-        ];
-    }
 
-    wp_reset_postdata();
-    return $results;
-}
+        $query   = new WP_Query(['post_type' => 'trip', 'posts_per_page' => 20]);
+
+        if ($query->have_posts() === false) {
+            return new WP_Error('not_found', 'NO Trips Found', ['status' => 404]);
+            exit;
+        }
+        $results = [];
+
+        while ($query->have_posts()) {
+            $query->the_post();
+            $results[] = [
+                'id'         => get_the_ID(),
+                'title'      => get_the_title(),
+                'content'    => get_the_content(),
+                'categories' => wp_get_post_terms(get_the_ID(), 'trip_category', ['fields' => 'names']),
+                'tags'       => wp_get_post_terms(get_the_ID(), 'trip_tag', ['fields' => 'names']),
+            ];
+        }
+
+        wp_reset_postdata();
+
+        set_transient('_wp_prfix_trips_', $results, 60 * HOUR_IN_SECONDS);
+        $cache = get_transient('_wp_prfix_trips_');
+    };
+    return $cache;
+};
 
 //==========================
 // GET id
 //==========================
+
+
+
 function get_single_trip($request)
 {
     $id   = (int) $request['id'];
     $post = get_post($id);
 
+
     if (!$post || $post->post_type !== 'trip') {
+
         return new WP_Error('not_found', 'Trip not found', ['status' => 404]);
     }
 
+
     return [
+
         'id'         => $post->ID,
         'title'      => $post->post_title,
         'content'    => $post->post_content,
@@ -215,7 +235,7 @@ function get_single_trip($request)
 
 // ===========================
 // POST=======================
-// ===========================
+// =========================== 
 
 function create_trip($request)
 {
@@ -449,29 +469,14 @@ function create_trip_tag($request)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //===========================================================================================================================================
 //============================
 //============================
 // Cashing
 //============================
-$TTL = 60;
-function get_cash_key($req)
+
+
+function get_cache_key($req)
 {
     $method = $req->get_method();
     $route = $req->get_route();
@@ -482,22 +487,21 @@ function get_cash_key($req)
     return "wp_rest_cash_key_" . md5($base);
 }
 
-function get($req)
+function get_cache($req)
 {
-    return get_transient(get_cash_key($req));
+    return get_transient(get_cache_key($req));
 }
 
-function set($req, $value)
+function set_cache($req, $value, $TTL)
 {
-    global $TTL;
-    return set_transient(get_cash_key($req), $value, $TTL);
+
+    return set_transient(get_cache_key($req), $value, $TTL);
 }
 
-function delete($req)
+function delete_cache($req)
 {
-    return delete_transient(get_cash_key($req));
+    return delete_transient(get_cache_key($req));
 }
-
 
 function clear()
 {
@@ -514,16 +518,14 @@ function clear()
 }
 
 
-function register_cash_clear_hooks()
-{
-    add_action('', 'clear');
-}
-
+function register_cache_clear_hooks() {}
 
 
 function manual_clear()
 {
     if (isset($_GET['clear'])) {
         clear();
+        echo 'Cache cleared!';
+        exit;
     }
 }
