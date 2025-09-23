@@ -31,7 +31,7 @@ function trips_login_endpoint($request)
 
     // التحقق من صحة بيانات المستخدم
     $user = wp_authenticate($username, $password);
-    //FIXME - check if the user is admin or editor
+
 
     // التحقق من أن المستخدم لديه صلاحيات مدير أو محرر
     if (!in_array('administrator', (array) $user->roles) && !in_array('editor', (array) $user->roles)) {
@@ -48,7 +48,7 @@ function trips_login_endpoint($request)
 
     // تحديد وقت إصدار وانتهاء صلاحية التوكن
     $issued  = time();
-    $expire  = $issued + 500; // 
+    $expire  = $issued + 3600; // 
 
     // إعداد البيانات التي سيتم تضمينها في التوكن
     $payload = [
@@ -104,6 +104,7 @@ function trips_verify_jwt($request)
     if (empty($payload->sub)) return false;
     return true;
 }
+
 
 // ===========================
 // Permission callback

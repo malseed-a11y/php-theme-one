@@ -284,4 +284,56 @@ function add_banner_to_content($content)
 
 add_action('the_content', 'add_banner_to_content', 10, 1);
 
+
+
+
+
+
+
+
+function activate()
+{
+    global $wpdb;
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $wpdb->query('START TRANSACTION');
+
+    // cpomments tabble
+    $table_comments = $wpdb->prefix . 'table_comments';
+    $sql = "CREATE TABLE $table_comments (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        username VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        birthday VARCHAR(255) NOT NULL, 
+        title VARCHAR(255) NOT NULL,
+        fav_food VARCHAR(255) NOT NULL,
+        message VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+    $result_taxonomy = dbDelta($sql);
+
+    if ($result_taxonomy) {
+        $wpdb->query('COMMIT');
+        return true;
+    } else {
+        $wpdb->query('ROLLBACK');
+        return false;
+    }
+}
+
+
+
+
+add_action('after_setup_theme', 'activate');
+
+
+
+
+
+
 require_once(dirname(__FILE__) . '/inc/trips_cpt.php');
+require_once(dirname(__FILE__) . '/inc/meta_box_trips.php');
+require_once(dirname(__FILE__) . '/form-handler.php');

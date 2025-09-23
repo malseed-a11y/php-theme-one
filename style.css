@@ -63,3 +63,90 @@ Author: Mosaab
 .trip-meta-box span.time::before {
   content: "⏰";
 }
+
+/* special form */
+
+.special-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.special-form .form-group {
+  margin-bottom: 20px;
+}
+
+.special-form .form-group label {
+  display: block;
+}
+
+.special-form .form-group input,
+.special-form .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+.special-form .form-group input:focus,
+.special-form .form-group textarea:focus {
+  border-color: #0073aa;
+}
+
+.special-form button[type="submit"] {
+  width: 100%;
+  background-color: #0073aa;
+  color: white;
+  padding: 10px 20px;
+  margin: 20px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.special-form button[type="submit"]:hover {
+  background-color: hsla(199, 100%, 33%, 0.863);
+}
+
+/* Special Table */
+.special-table {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.special-table th,
+.special-table td {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.special-table th {
+  background-color: #0073aa;
+  color: #fff;
+  font-weight: 600;
+}
+
+.special-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.special-table tr:hover {
+  background-color: #eaf4fc;
+}
+
+.comments-no-data {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: 15px;
+}

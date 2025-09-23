@@ -1,5 +1,6 @@
 <?php
-// إضافة الـ Meta Box في الشريط الجانبي
+
+
 function trip_add_meta_box()
 {
     add_meta_box(
@@ -7,7 +8,7 @@ function trip_add_meta_box()
         'Trip Details',
         'trip_meta_box_callback',
         'trip',
-        'side',      // sidebar
+        'side',
         'low'
     );
 }
@@ -39,12 +40,8 @@ function trip_meta_box_callback($post)
     // City of Arrival  
     echo '<p class="form-field">
             <label for="trip_to_city"><strong>City of Arrival be</strong></label>
-            <br><select name="trip_to_city" id="trip_to_city">
-                <option value="">Choose city</option>';
-    foreach ($cities as $city) {
-        echo '<option value="' . esc_attr($city) . '" ' . selected($to_city, $city, false) . '>' . esc_html($city) . '</option>';
-    }
-    echo '</select>
+            <br>
+            <input type="text" name="trip_to_city" id="trip_to_city" value="' . esc_attr($to_city) . '"/>
           </p>';
 
     // Date of the Trip
@@ -80,6 +77,7 @@ function save_trip_meta($post_id)
     if (isset($_POST['trip_from_city'])) {
         update_post_meta($post_id, '_trip_from_city', sanitize_text_field($_POST['trip_from_city']));
     }
+
 
     if (isset($_POST['trip_to_city'])) {
         update_post_meta($post_id, '_trip_to_city', sanitize_text_field($_POST['trip_to_city']));
