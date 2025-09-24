@@ -78,7 +78,7 @@ function handle_send_message_form()
 
     $table_name = $wpdb->prefix . 'table_comments';
 
-    // استخدام الدالة wpdb->insert الآمنة
+
     $result = $wpdb->insert(
         $table_name,
         [
@@ -107,7 +107,7 @@ function handle_send_message_form()
 
         wp_die('Database insertion failed: ' . $wpdb->last_error);
     } else {
-
+        delete_transient('_wp_prfix_comments_');
         header('Location:http://localhost/wordpress/comments-form/');
     }
 }

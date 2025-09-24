@@ -171,6 +171,21 @@ function trips_register_rest_routes()
 //==========================
 // GET =====================
 //==========================
+if (class_exists('\WP_REST_Cache_Plugin\Includes\Caching\Caching')) {
+
+
+
+    function wprc_add_posts_endpoint($allowed_endpoints)
+    {
+        if (! isset($allowed_endpoints['trips/v1'])) {
+            $allowed_endpoints['trips/v1'][] = 'trips';
+        }
+        return $allowed_endpoints;
+    }
+    add_filter('wp_rest_cache/allowed_endpoints', 'wprc_add_posts_endpoint', 10, 1);
+};
+
+
 
 function get_all_trips()
 {
@@ -213,6 +228,7 @@ function get_all_trips()
 
 function get_single_trip($request)
 {
+    $request = $request->get_params();
     $id   = (int) $request['id'];
     $post = get_post($id);
 
@@ -253,7 +269,7 @@ function create_trip($request)
         return new WP_Error('invalid_content', 'Content is too long (max 10000 characters)', ['status' => 400]);
     }
 
-    $post_id = wp_insert_post([
+    $id = wp_insert_post([
         'post_type'    => 'trip',
         'post_title'   => $title,
         'post_content' => $content,
@@ -264,22 +280,21 @@ function create_trip($request)
     if (!empty($params['categories'])) {
 
         $categories = array_map('sanitize_text_field', (array) $params['categories']);
-        wp_set_object_terms($post_id, $categories, 'trip_category');
+        wp_set_object_terms($id, $categories, 'trip_category');
     }
     if (!empty($params['tags'])) {
 
         $tags = array_map('sanitize_text_field', (array) $params['tags']);
-        wp_set_object_terms($post_id, $tags, 'trip_tag');
+        wp_set_object_terms($id, $tags, 'trip_tag');
     }
-    $new_post = get_post($post_id);
 
-    return [
-        'id'         => $new_post->ID,
-        'title'      => $new_post->post_title,
-        'content'    => $new_post->post_content,
-        'categories' => wp_get_post_terms($post_id, 'trip_category', ['fields' => 'names']),
-        'tags'       => wp_get_post_terms($post_id, 'trip_tag', ['fields' => 'names']),
-    ];
+
+
+    $new_post = get_post($id);
+
+    $new_id = $new_post->ID;
+
+    return 'secsses - the new post id:' . $new_id;
 }
 
 //==========================
@@ -336,16 +351,11 @@ function update_trip($request)
         }
         wp_set_object_terms($id, $tags, 'trip_tag');
     }
+    $new_trip = new WP_REST_Request('GET', '/trips/v1/trips/' . $id);
+    $new_trip->set_param('id', $id);
+    $new_trip = get_single_trip($new_trip);
 
-    $updated_post = get_post($id);
-
-    return [
-        'id'         => $updated_post->ID,
-        'title'      => $updated_post->post_title,
-        'content'    => $updated_post->post_content,
-        'categories' => wp_get_post_terms($id, 'trip_category', ['fields' => 'names']),
-        'tags'       => wp_get_post_terms($id, 'trip_tag', ['fields' => 'names']),
-    ];
+    return $new_trip;
 }
 
 //==========================

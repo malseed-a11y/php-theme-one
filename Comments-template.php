@@ -62,7 +62,7 @@ get_header();
             <label for="message">Message</label>
             <textarea id="message" name="message" required><?php echo isset($_GET['message']) ? esc_textarea($_GET['message']) : ''; ?></textarea>
         </div>
-        <button type="submit" name="clear_cache">Submit</button>
+        <button type="submit">Submit</button>
     </form>
 
 
@@ -81,9 +81,9 @@ get_header();
             $results = get_transient('_wp_prfix_comments_');
         }
 
-        if (isset($_POST['clear_cache'])) {
-            delete_transient('_wp_prfix_comments_');
-        }
+        // if (isset($_POST['clear_cache'])) {
+        //     delete_transient('_wp_prfix_comments_');
+        // }
 
 
         if (empty($results)) {
