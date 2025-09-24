@@ -164,7 +164,7 @@ function trips_register_rest_routes()
 
 
 //==========================
-// REST API Endpoints
+// REST API Endpoints Functions
 require_once __DIR__ . '/api/custom_endpoints.php';
 //==========================
 
