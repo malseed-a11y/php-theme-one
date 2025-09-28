@@ -195,9 +195,24 @@ function mosaab_register_scripts()
         '1.0',
         true
     );
+    wp_enqueue_script(
+        'lazy_load',
+        get_template_directory_uri() . './assets/js/lazysizes.min.js',
+        array(),
+        '1.0',
+    );
 }
 
 add_action('wp_enqueue_scripts', 'mosaab_register_scripts');
+
+function add_async_attribute($tag, $handle, $src)
+{
+    if ('lazy_load' === $handle) {
+        return '<script src="' . esc_url($src) . '" async ></script>';
+    }
+    return $tag;
+}
+add_filter('script_loader_tag', 'add_async_attribute', 10, 3);
 
 
 

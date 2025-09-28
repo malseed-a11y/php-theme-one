@@ -7,10 +7,6 @@ Tags: portfolio, agency, custom-post-types, customizer, acf, responsive, accessi
 Author: Mosaab
 */
 
-
-
-
-
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -891,4 +887,16 @@ div.comment:first-of-type {
   font-size: 14px;
   color: #555;
   margin-top: 15px;
+}
+
+/* lazy load */
+.blur-up {
+  -webkit-filter: blur(20px);
+  filter: blur(20px);
+  transition: filter 5s, -webkit-filter 5s;
+}
+
+.blur-up.lazyloaded {
+  -webkit-filter: blur(0);
+  filter: blur(0);
 }

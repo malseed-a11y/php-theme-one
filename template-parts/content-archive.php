@@ -1,8 +1,8 @@
-<div class="container">
-    <div class="post mb-5">
+<div class="container" style="margin-top: 20rem;">
+    <div class="post  mb-5">
         <div class="media">
             <?php if (has_post_thumbnail()): ?>
-                <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="<?php the_post_thumbnail_url('thumbnail'); ?>" alt="<?php the_title_attribute(); ?>">
+                <img class=" lazyload blur-up mr-3 img-fluid post-thumb  d-md-flex" data-srcset="<?php the_post_thumbnail_url('thumbnail'); ?>" alt="<?php the_title_attribute(); ?>">
             <?php endif; ?>
             <div class="media-body">
                 <h3 class="title mb-1"> <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>

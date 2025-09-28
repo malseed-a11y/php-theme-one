@@ -12,7 +12,7 @@
 								<div class="swiper-slide">Slide 2</div>
 								<?php if (has_post_thumbnail()) { ?>
 									<div class="swiper-slide">
-										<img src="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title_attribute(); ?>">
+										<img class=" lazyload blur-up " data-srcset="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title_attribute(); ?>">
 									</div>
 								<?php } ?>
 
